@@ -88,6 +88,12 @@ public class RegExGeneratorTest {
         assertTrue(validate("....", 5));
     }
 
+    @Test
+    public void testTwoSetofCharacters() {
+        assertTrue(validate("[abc]+[def]+a*", 4));
+    }
+
+
 
 
 }
