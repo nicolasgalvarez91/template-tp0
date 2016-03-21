@@ -54,7 +54,7 @@ public class RegExGenerator {
                         } else if (actualCharInExpression != stringIterator.DONE){
                             setOfPossibleChars.add(actualCharInExpression);
                         } else
-                            return null;
+                            return "";
                         actualCharInExpression = stringIterator.next();
                     }
                     actualCharInExpression = stringIterator.next();

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class RegExGeneratorTest {
@@ -62,5 +63,31 @@ public class RegExGeneratorTest {
         assertTrue(validate("[abc]+", 1));
     }
 
-    // TODO: Add more tests!!!
+    @Test
+    public void testTwoStringsOfCharacterSetWithQuantifiers() {
+        assertTrue(validate("[abc]+", 2));
+    }
+
+    @Test
+    public void testAllKindOfToken() {
+        assertTrue(validate("[abc]+t*rhi?\\[*", 2));
+    }
+
+    @Test
+    public void testEmptyExpression() {
+        assertTrue(validate("", 3));
+    }
+
+    @Test
+    public void testLotOfLiterals() {
+        assertTrue(validate("a+b+c+d+e+", 2));
+    }
+
+    @Test
+    public void testFiveFullRandomFourCharacterWords() {
+        assertTrue(validate("....", 5));
+    }
+
+
+
 }
