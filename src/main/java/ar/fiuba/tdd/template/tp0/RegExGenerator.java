@@ -28,29 +28,22 @@ public class RegExGenerator {
         StringCharacterIterator stringIterator = new StringCharacterIterator(regEx);
         char actualCharInExpression = stringIterator.first();
         while (actualCharInExpression != stringIterator.DONE) {
-            switch (actualCharInExpression) {
-                case '.':
-                    wordToReturn = wordToReturn + this.processDotToken(stringIterator);
-                    actualCharInExpression = stringIterator.current();
-                    break;
-                case '[':
-                    wordToReturn = wordToReturn + this.processSetToken(stringIterator);
-                    actualCharInExpression = stringIterator.current();
-                    break;
-                case '\\':
-                    wordToReturn = wordToReturn + this.processBackslashToken(stringIterator);
-                    actualCharInExpression = stringIterator.current();
-                    break;
-                default:
-                    wordToReturn = wordToReturn + this.processLiteralToken(stringIterator);
-                    actualCharInExpression = stringIterator.current();
-                    break;
+            if (actualCharInExpression == '.') {
+                wordToReturn = wordToReturn + this.processDotToken(stringIterator);
+            } else if (actualCharInExpression == '[') {
+                wordToReturn = wordToReturn + this.processSetToken(stringIterator);
+
+            } else if (actualCharInExpression == '\\') {
+                wordToReturn = wordToReturn + this.processBackslashToken(stringIterator);
+            } else {
+                wordToReturn = wordToReturn + this.processLiteralToken(stringIterator);
             }
+            actualCharInExpression = stringIterator.current();
         }
         return wordToReturn;
     }
 
-    private String processDotToken(StringCharacterIterator iterator){
+    private String processDotToken(StringCharacterIterator iterator) {
         String stringToReturn = "";
         char currentChar = iterator.next();
         if (currentChar != iterator.DONE) {
@@ -66,7 +59,7 @@ public class RegExGenerator {
         return stringToReturn;
     }
 
-    private String processSetToken(StringCharacterIterator iterator){
+    private String processSetToken(StringCharacterIterator iterator) {
         String stringToReturn = "";
         char currentChar = iterator.next();
         ArrayList<Character> setOfPossibleChars =  this.getSetOfChars(iterator);
@@ -80,7 +73,7 @@ public class RegExGenerator {
         return stringToReturn;
     }
 
-    private String processBackslashToken(StringCharacterIterator iterator){
+    private String processBackslashToken(StringCharacterIterator iterator) {
         String stringToReturn = "";
         char currentChar = iterator.next();
         char escapedChar = currentChar;
@@ -94,7 +87,7 @@ public class RegExGenerator {
         return stringToReturn;
     }
 
-    private String processLiteralToken(StringCharacterIterator iterator){
+    private String processLiteralToken(StringCharacterIterator iterator) {
         String stringToReturn = "";
         char literal = iterator.current();
         char currentChar = iterator.next();
@@ -107,7 +100,7 @@ public class RegExGenerator {
         return stringToReturn;
     }
 
-    private ArrayList<Character> getSetOfChars(StringCharacterIterator iterator){
+    private ArrayList<Character> getSetOfChars(StringCharacterIterator iterator) {
         char actualChar = iterator.next();
         ArrayList<Character> arrayToReturn = new ArrayList<Character>();
         while (actualChar != ']') {
@@ -127,6 +120,7 @@ public class RegExGenerator {
         }
         return arrayToReturn;
     }
+
     private boolean isAQuantifierChar(char regularExpressionChar) {
         if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+') {
             return true;
