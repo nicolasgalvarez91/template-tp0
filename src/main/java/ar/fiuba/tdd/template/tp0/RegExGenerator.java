@@ -1,9 +1,9 @@
 package ar.fiuba.tdd.template.tp0;
 
 import java.util.ArrayList;
-import java.text.StringCharacterIterator;
 import java.util.List;
 import java.util.Random;
+import java.text.StringCharacterIterator;
 
 public class RegExGenerator {
 
@@ -16,15 +16,14 @@ public class RegExGenerator {
 
     public List<String> generate(String regEx, int numberOfResults) {
         ArrayList<String> arrayToReturn = new ArrayList<String>();
-        for (int i=0 ; i < numberOfResults ; i++){
+        for (int i = 0 ; i < numberOfResults ; i++)
             arrayToReturn.add(this.getWordForRegularExpresion(regEx));
-        }
         System.out.println(arrayToReturn);
         return arrayToReturn;
     }
 
     private String getWordForRegularExpresion(String regularExpression){
-        String wordToReturn="";
+        String wordToReturn = "";
         StringCharacterIterator stringIterator = new StringCharacterIterator(regularExpression);
         char actualCharInExpression = stringIterator.first();
         while (actualCharInExpression != stringIterator.DONE){
