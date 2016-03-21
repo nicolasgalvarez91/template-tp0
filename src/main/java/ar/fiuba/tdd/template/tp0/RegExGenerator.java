@@ -38,8 +38,6 @@ public class RegExGenerator {
                         } else {
                             wordToReturn = wordToReturn + this.stringForDotToken('\0');
                         }
-
-
                     } else {
                         wordToReturn = wordToReturn + this.stringForDotToken('\0');
                     }
@@ -47,14 +45,15 @@ public class RegExGenerator {
                 case '[':
                     actualCharInExpression = stringIterator.next();
                     ArrayList<Character> setOfPossibleChars = new ArrayList<Character>();
-                    while(actualCharInExpression !=']') {
+                    while (actualCharInExpression != ']') {
                         if (actualCharInExpression == '\\') {
                             actualCharInExpression = stringIterator.next();
                             setOfPossibleChars.add(actualCharInExpression);
-                        } else if (actualCharInExpression != stringIterator.DONE){
+                        } else if (actualCharInExpression != stringIterator.DONE) {
                             setOfPossibleChars.add(actualCharInExpression);
-                        } else
+                        } else {
                             return "";
+                        }
                         actualCharInExpression = stringIterator.next();
                     }
                     actualCharInExpression = stringIterator.next();
@@ -72,8 +71,9 @@ public class RegExGenerator {
                     if (this.isAQuantifierChar(actualCharInExpression)) {
                         wordToReturn = wordToReturn + this.stringForLiteral(escapedChar, actualCharInExpression);
                         actualCharInExpression = stringIterator.next();
-                    } else
-                        wordToReturn = wordToReturn + this.stringForLiteral(escapedChar,'\0');
+                    } else {
+                        wordToReturn = wordToReturn + this.stringForLiteral(escapedChar, '\0');
+                    }
                     break;
                 default:
                     char literal = actualCharInExpression;
@@ -81,12 +81,10 @@ public class RegExGenerator {
                     if (this.isAQuantifierChar(actualCharInExpression)) {
                         wordToReturn = wordToReturn + this.stringForLiteral(literal, actualCharInExpression);
                         actualCharInExpression = stringIterator.next();
-                    } else
-                        wordToReturn = wordToReturn + this.stringForLiteral(literal,'\0');
+                    } else {
+                        wordToReturn = wordToReturn + this.stringForLiteral(literal, '\0');
+                    }
                     break;
-
-
-
             }
         }
         return wordToReturn;
@@ -95,10 +93,11 @@ public class RegExGenerator {
 
 
     private boolean isAQuantifierChar(char regularExpressionChar) {
-      if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+')
+      if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+') {
           return true;
-      else
+      } else {
           return false;
+      }
 
     }
 
