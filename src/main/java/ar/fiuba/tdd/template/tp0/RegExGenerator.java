@@ -159,23 +159,22 @@ public class RegExGenerator {
         char quantifierChar = iterator.current();
         Random randomizer = new Random();
 
-            switch (quantifierChar) {
-                case '?':
-                    lengthToReturn = randomizer.nextInt(2);
-                    iterator.next();
-                    break;
-                case '*':
-                    lengthToReturn = randomizer.nextInt(this.maxLength + 1);
-                    iterator.next();
-                    break;
-                case '+':
-                    lengthToReturn = 1 + randomizer.nextInt(this.maxLength + 1);
-                    iterator.next();
-                    break;
-                default:
-                    lengthToReturn = 1;
-                    break;
-            }
+        if (quantifierChar == '?') {
+            lengthToReturn = randomizer.nextInt(2);
+            iterator.next();
+
+        } else if (quantifierChar == '*') {
+            lengthToReturn = randomizer.nextInt(this.maxLength + 1);
+            iterator.next();
+
+        } else if (quantifierChar == '+') {
+            lengthToReturn = 1 + randomizer.nextInt(this.maxLength + 1);
+            iterator.next();
+
+        } else {
+            lengthToReturn = 1;
+
+        }
 
 
 
