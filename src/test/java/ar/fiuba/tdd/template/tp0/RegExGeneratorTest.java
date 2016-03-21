@@ -102,6 +102,19 @@ public class RegExGeneratorTest {
         assertTrue(validate("[a]+", 4));
     }
 
+    @Test
+    public void testTpExample() {
+        assertTrue(validate("..+[ab]*d?c", 4));
+    }
 
+    @Test
+    public void testZeroOrManyChars() {
+        assertTrue(validate("a*b*c*d*", 4));
+    }
+
+    @Test
+    public void testZeroOrOne() {
+        assertTrue(validate("a?b?c?d?", 4));
+    }
 
 }

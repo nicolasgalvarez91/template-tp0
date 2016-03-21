@@ -32,7 +32,6 @@ public class RegExGenerator {
                 wordToReturn.append(this.processDotToken(stringIterator));
             } else if (actualCharInExpression == '[') {
                 wordToReturn.append(this.processSetToken(stringIterator));
-
             } else if (actualCharInExpression == '\\') {
                 wordToReturn.append(this.processBackslashToken(stringIterator));
             } else {
