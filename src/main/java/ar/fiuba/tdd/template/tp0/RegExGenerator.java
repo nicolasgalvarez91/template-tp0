@@ -30,73 +30,108 @@ public class RegExGenerator {
         while (actualCharInExpression != stringIterator.DONE) {
             switch (actualCharInExpression) {
                 case '.':
-                    actualCharInExpression = stringIterator.next();
-                    if (actualCharInExpression != stringIterator.DONE) {
-                        if (this.isAQuantifierChar(actualCharInExpression)) {
-                            wordToReturn = wordToReturn + this.stringForDotToken(actualCharInExpression);
-                            actualCharInExpression = stringIterator.next();
-                        } else {
-                            wordToReturn = wordToReturn + this.stringForDotToken('\0');
-                        }
-                    } else {
-                        wordToReturn = wordToReturn + this.stringForDotToken('\0');
-                    }
+                    wordToReturn = wordToReturn + this.processDotToken(stringIterator);
+                    actualCharInExpression = stringIterator.current();
                     break;
                 case '[':
-                    actualCharInExpression = stringIterator.next();
-                    ArrayList<Character> setOfPossibleChars = new ArrayList<Character>();
-                    while (actualCharInExpression != ']') {
-                        if (actualCharInExpression == '\\') {
-                            actualCharInExpression = stringIterator.next();
-                            setOfPossibleChars.add(actualCharInExpression);
-                        } else if (actualCharInExpression != stringIterator.DONE) {
-                            setOfPossibleChars.add(actualCharInExpression);
-                        } else {
-                            return "";
-                        }
-                        actualCharInExpression = stringIterator.next();
-                    }
-                    actualCharInExpression = stringIterator.next();
-                    if (this.isAQuantifierChar(actualCharInExpression)) {
-                        wordToReturn = wordToReturn + this.stringWithSetToken(setOfPossibleChars, actualCharInExpression);
-                        actualCharInExpression = stringIterator.next();
-                    } else {
-                        wordToReturn = wordToReturn + this.stringWithSetToken(setOfPossibleChars, '\0');
-                    }
+                    wordToReturn = wordToReturn + this.processSetToken(stringIterator);
+                    actualCharInExpression = stringIterator.current();
                     break;
                 case '\\':
-                    actualCharInExpression = stringIterator.next();
-                    char escapedChar = actualCharInExpression;
-                    actualCharInExpression = stringIterator.next();
-                    if (this.isAQuantifierChar(actualCharInExpression)) {
-                        wordToReturn = wordToReturn + this.stringForLiteral(escapedChar, actualCharInExpression);
-                        actualCharInExpression = stringIterator.next();
-                    } else {
-                        wordToReturn = wordToReturn + this.stringForLiteral(escapedChar, '\0');
-                    }
+                    wordToReturn = wordToReturn + this.processBackslashToken(stringIterator);
+                    actualCharInExpression = stringIterator.current();
                     break;
                 default:
-                    char literal = actualCharInExpression;
-                    actualCharInExpression = stringIterator.next();
-                    if (this.isAQuantifierChar(actualCharInExpression)) {
-                        wordToReturn = wordToReturn + this.stringForLiteral(literal, actualCharInExpression);
-                        actualCharInExpression = stringIterator.next();
-                    } else {
-                        wordToReturn = wordToReturn + this.stringForLiteral(literal, '\0');
-                    }
+                    wordToReturn = wordToReturn + this.processLiteralToken(stringIterator);
+                    actualCharInExpression = stringIterator.current();
                     break;
             }
         }
         return wordToReturn;
     }
 
+    private String processDotToken(StringCharacterIterator iterator){
+        String stringToReturn = "";
+        char currentChar = iterator.next();
+        if (currentChar != iterator.DONE) {
+            if (this.isAQuantifierChar(currentChar)) {
+                stringToReturn = stringToReturn + this.stringForDotToken(currentChar);
+                iterator.next();
+            } else {
+                stringToReturn = stringToReturn + this.stringForDotToken('\0');
+            }
+        } else {
+            stringToReturn = stringToReturn + this.stringForDotToken('\0');
+        }
+        return stringToReturn;
+    }
 
+    private String processSetToken(StringCharacterIterator iterator){
+        String stringToReturn = "";
+        char currentChar = iterator.next();
+        ArrayList<Character> setOfPossibleChars =  this.getSetOfChars(iterator);
+        currentChar = iterator.next();
+        if (this.isAQuantifierChar(currentChar)) {
+            stringToReturn = stringToReturn + this.stringWithSetToken(setOfPossibleChars, currentChar);
+            iterator.next();
+        } else {
+            stringToReturn = stringToReturn + this.stringWithSetToken(setOfPossibleChars, '\0');
+        }
+        return stringToReturn;
+    }
 
+    private String processBackslashToken(StringCharacterIterator iterator){
+        String stringToReturn = "";
+        char currentChar = iterator.next();
+        char escapedChar = currentChar;
+        currentChar = iterator.next();
+        if (this.isAQuantifierChar(currentChar)) {
+            stringToReturn = stringToReturn + this.stringForLiteral(escapedChar, currentChar);
+            iterator.next();
+        } else {
+            stringToReturn = stringToReturn + this.stringForLiteral(escapedChar, '\0');
+        }
+        return stringToReturn;
+    }
+
+    private String processLiteralToken(StringCharacterIterator iterator){
+        String stringToReturn = "";
+        char literal = iterator.current();
+        char currentChar = iterator.next();
+        if (this.isAQuantifierChar(currentChar)) {
+            stringToReturn = stringToReturn + this.stringForLiteral(literal, currentChar);
+            iterator.next();
+        } else {
+            stringToReturn = stringToReturn + this.stringForLiteral(literal, '\0');
+        }
+        return stringToReturn;
+    }
+
+    private ArrayList<Character> getSetOfChars(StringCharacterIterator iterator){
+        char actualChar = iterator.next();
+        ArrayList<Character> arrayToReturn = new ArrayList<Character>();
+        while (actualChar != ']') {
+            if (actualChar == '\\') {
+                actualChar = iterator.next();
+                arrayToReturn.add(actualChar);
+            } else if (actualChar != iterator.DONE) {
+                arrayToReturn.add(actualChar);
+            } else {
+                return new ArrayList<Character>() {
+                    {
+                        add('\0');
+                    }
+                };
+            }
+            actualChar = iterator.next();
+        }
+        return arrayToReturn;
+    }
     private boolean isAQuantifierChar(char regularExpressionChar) {
         if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+') {
-          return true;
+            return true;
         } else {
-          return false;
+            return false;
         }
 
     }
