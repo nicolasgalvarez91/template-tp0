@@ -93,11 +93,11 @@ public class RegExGenerator {
 
 
     private boolean isAQuantifierChar(char regularExpressionChar) {
-      if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+') {
+        if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+') {
           return true;
-      } else {
+        } else {
           return false;
-      }
+        }
 
     }
 
@@ -158,7 +158,7 @@ public class RegExGenerator {
         int stringLongitude;
         stringLongitude = this.getLengthForQuantifier(quantifierChar);
 
-        for (int i = 0; i<stringLongitude ; i++) {
+        for (int i = 0; i < stringLongitude ; i++) {
             int randomNumber = 33 + randomizer.nextInt(126 - 33); // getting a random number between 33 and 126
             stringToReturn = stringToReturn + (char) randomNumber;
         }
