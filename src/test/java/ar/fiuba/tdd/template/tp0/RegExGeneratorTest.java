@@ -13,7 +13,6 @@ public class RegExGeneratorTest {
 
     private boolean validate(String regEx, int numberOfResults) {
         RegExGenerator generator = new RegExGenerator(5);
-        // TODO: Uncomment parameters
         List<String> results = generator.generate(regEx, numberOfResults);
         // force matching the beginning and the end of the strings
         Pattern pattern = Pattern.compile("^" + regEx + "$");
@@ -64,6 +63,11 @@ public class RegExGeneratorTest {
     }
 
     @Test
+    public void testCharacterSetWithQuantifierZeroOrMany() {
+        assertTrue(validate("[abc]*", 1));
+    }
+
+    @Test
     public void testTwoStringsOfCharacterSetWithQuantifiers() {
         assertTrue(validate("[abc]+", 2));
     }
@@ -89,10 +93,14 @@ public class RegExGeneratorTest {
     }
 
     @Test
-    public void testTwoSetofCharacters() {
+    public void testTwoSetOfCharacters() {
         assertTrue(validate("[abc]+[def]+a*", 4));
     }
 
+    @Test
+    public void testSetOfOneChar() {
+        assertTrue(validate("[a]+", 4));
+    }
 
 
 
