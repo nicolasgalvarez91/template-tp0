@@ -1,9 +1,9 @@
 package ar.fiuba.tdd.template.tp0;
 
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.text.StringCharacterIterator;
 
 public class RegExGenerator {
 
@@ -16,37 +16,38 @@ public class RegExGenerator {
 
     public List<String> generate(String regEx, int numberOfResults) {
         ArrayList<String> arrayToReturn = new ArrayList<String>();
-        for (int i = 0 ; i < numberOfResults ; i++)
-            arrayToReturn.add(this.getWordForRegularExpresion(regEx));
+        for (int i = 0 ; i < numberOfResults ; i++) {
+            arrayToReturn.add(this.getWordForRegEx(regEx));
+        }
         System.out.println(arrayToReturn);
         return arrayToReturn;
     }
 
-    private String getWordForRegularExpresion(String regularExpression){
+    private String getWordForRegEx(String regEx) {
         String wordToReturn = "";
-        StringCharacterIterator stringIterator = new StringCharacterIterator(regularExpression);
+        StringCharacterIterator stringIterator = new StringCharacterIterator(regEx);
         char actualCharInExpression = stringIterator.first();
-        while (actualCharInExpression != stringIterator.DONE){
-            switch (actualCharInExpression){
+        while (actualCharInExpression != stringIterator.DONE) {
+            switch (actualCharInExpression) {
                 case '.':
                     actualCharInExpression = stringIterator.next();
-                    if (actualCharInExpression != stringIterator.DONE){
-                        if (this.isAQuantifierChar(actualCharInExpression)){
+                    if (actualCharInExpression != stringIterator.DONE) {
+                        if (this.isAQuantifierChar(actualCharInExpression)) {
                             wordToReturn = wordToReturn + this.stringForDotToken(actualCharInExpression);
                             actualCharInExpression = stringIterator.next();
-                        } else{
+                        } else {
                             wordToReturn = wordToReturn + this.stringForDotToken('\0');
                         }
 
 
-                    } else{
+                    } else {
                         wordToReturn = wordToReturn + this.stringForDotToken('\0');
                     }
                     break;
                 case '[':
                     actualCharInExpression = stringIterator.next();
                     ArrayList<Character> setOfPossibleChars = new ArrayList<Character>();
-                    while(actualCharInExpression !=']'){
+                    while(actualCharInExpression !=']') {
                         if (actualCharInExpression == '\\') {
                             actualCharInExpression = stringIterator.next();
                             setOfPossibleChars.add(actualCharInExpression);
@@ -57,7 +58,7 @@ public class RegExGenerator {
                         actualCharInExpression = stringIterator.next();
                     }
                     actualCharInExpression = stringIterator.next();
-                    if (this.isAQuantifierChar(actualCharInExpression)){
+                    if (this.isAQuantifierChar(actualCharInExpression)) {
                         wordToReturn = wordToReturn + this.stringWithSetToken(setOfPossibleChars, actualCharInExpression);
                         actualCharInExpression = stringIterator.next();
                     } else {
@@ -71,7 +72,7 @@ public class RegExGenerator {
                     if (this.isAQuantifierChar(actualCharInExpression)) {
                         wordToReturn = wordToReturn + this.stringForLiteral(escapedChar, actualCharInExpression);
                         actualCharInExpression = stringIterator.next();
-                    }else
+                    } else
                         wordToReturn = wordToReturn + this.stringForLiteral(escapedChar,'\0');
                     break;
                 default:
@@ -80,7 +81,7 @@ public class RegExGenerator {
                     if (this.isAQuantifierChar(actualCharInExpression)) {
                         wordToReturn = wordToReturn + this.stringForLiteral(literal, actualCharInExpression);
                         actualCharInExpression = stringIterator.next();
-                    }else
+                    } else
                         wordToReturn = wordToReturn + this.stringForLiteral(literal,'\0');
                     break;
 
@@ -93,7 +94,7 @@ public class RegExGenerator {
 
 
 
-    private boolean isAQuantifierChar(char regularExpressionChar){
+    private boolean isAQuantifierChar(char regularExpressionChar) {
       if (regularExpressionChar == '*' || regularExpressionChar == '?' || regularExpressionChar == '+')
           return true;
       else
@@ -102,23 +103,23 @@ public class RegExGenerator {
     }
 
 
-    private String stringForLiteral(char literal , char quantifierChar){
+    private String stringForLiteral(char literal , char quantifierChar) {
         String stringToReturn = "";
         int stringLength = this.getLengthForQuantifier(quantifierChar);
         Random randomizer = new Random();
-        for (int i = 0 ; i < stringLength; i++){
+        for (int i = 0 ; i < stringLength; i++) {
             stringToReturn = stringToReturn + literal;
         }
         return stringToReturn;
     }
 
-    private String stringWithSetToken(ArrayList<Character> setOfChars, char quantifierChar){
+    private String stringWithSetToken(ArrayList<Character> setOfChars, char quantifierChar) {
         String stringToReturn = "";
         int lengthToReturn = this.getLengthForQuantifier(quantifierChar);
         int numberOfCharsInSet = setOfChars.size();
         Random randomizer = new Random();
 
-        for (int i = 0; i < lengthToReturn; i++){
+        for (int i = 0; i < lengthToReturn; i++) {
             int randomSetPosition = randomizer.nextInt(numberOfCharsInSet - 1);
             stringToReturn = stringToReturn + setOfChars.get(randomSetPosition);
         }
@@ -126,13 +127,13 @@ public class RegExGenerator {
         return stringToReturn;
     }
 
-    private int getLengthForQuantifier(char quantifierChar){
+    private int getLengthForQuantifier(char quantifierChar) {
         int lengthToReturn = 0;
         Random randomizer = new Random();
-        if (quantifierChar == '\0'){
+        if (quantifierChar == '\0') {
             lengthToReturn = 1;
         } else {
-            switch (quantifierChar){
+            switch (quantifierChar) {
                 case '?':
                     lengthToReturn = randomizer.nextInt(1);
                     break;
@@ -152,7 +153,7 @@ public class RegExGenerator {
         return lengthToReturn;
     }
 
-    private String stringForDotToken(char quantifierChar){
+    private String stringForDotToken(char quantifierChar) {
         String stringToReturn = "";
         Random randomizer = new Random();
         int stringLongitude;
